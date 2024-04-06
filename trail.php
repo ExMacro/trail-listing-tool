@@ -38,6 +38,16 @@ if(isset($_GET['location1'])) {
      $location1 = $_GET['location1']; // get from url parameter, ?location1=xxx
 };
 
+$marked = ''; // set manually here if needed
+if(isset($_GET['marked'])) {
+     $marked = $_GET['marked']; // get from url parameter, ?marked=0 or marked=1
+};
+
+$deleted = ''; // set manually here if needed
+if(isset($_GET['deleted'])) {
+     $deleted = $_GET['deleted']; // get from url parameter, ?deleted=0 or deleted=1
+};
+
 // Minimal error check
 if($code == '') {
      echo '<p>API key not set.</p>';
@@ -73,7 +83,7 @@ if($department2 != '') {
 };
 
 // set POST variables
-$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D='.$freematch.'&search%5Bdepartment_ids%5D%5B%5D='.$department1.''.$department2.'&search%5Blocations%5D%5B%5D='.$location1.''.$model_category_id1.''.$model_category_id2.'&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D=&search%5Bdeleted%5D=&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
+$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D='.$freematch.'&search%5Bdepartment_ids%5D%5B%5D='.$department1.''.$department2.'&search%5Blocations%5D%5B%5D='.$location1.''.$model_category_id1.''.$model_category_id2.'&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D='.$marked.'&search%5Bdeleted%5D='.$deleted.'&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
 
 // open connection
 $ch = curl_init();
