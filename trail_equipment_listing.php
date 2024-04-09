@@ -130,8 +130,7 @@ curl_close($ch);
 $array = json_decode($json, true);
 
 // Display root location
-echo "<h1>Room ".$array['data'][0]['location']['location']['code']."</h1>";
-echo "".$array['data'][0]['location']['location']['name']."";
+echo "<h1>Room ".$array['data'][0]['root_location']."</h1>";
 echo "<h3>This room has the following equipment</h3>";
 
 // Create an array for the web page
