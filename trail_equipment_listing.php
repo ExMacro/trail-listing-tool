@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Equipment listing from Trail</title>
-    </head>
-    <body>
-    <table>
+    <style>
+          body {
+               font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+               font-size: 14px;
+          }
+          table {
+               table-layout: auto;
+               width: 1200px; /* NOTE: Change to relative values! */
+               border: 0;
+               border-collapse: collapse;
+          }
+          td {
+               width: auto;
+               white-space: nowrap;
+               padding: 2px 5px;
+          }
+          table td:nth-child(2),
+          table td:nth-child(3) {
+               white-space:nowrap;
+               width: 1px;
+               padding-right: 30px;
+               margin: 10px;
+          }
+          table tr:nth-child(1) {
+               font-weight: bold;
+          }
+          tr {
+          border-bottom: 1px solid white;
+          }
+     </style>
+     </head>
+<body>
 <?php
 
 require_once('./config.php');
@@ -37,6 +66,11 @@ if(isset($_GET['model2'])) {
 $location1 = ''; // set manually here if needed
 if(isset($_GET['location1'])) {
      $location1 = $_GET['location1']; // get from url parameter, ?location1=xxx
+};
+
+$deleted = ''; // set manually here if needed
+if(isset($_GET['deleted'])) {
+     $deleted = $_GET['deleted']; // get from url parameter, ?deleted=0 or deleted=1
 };
 
 // Minimal error check
@@ -74,7 +108,7 @@ if($department2 != '') {
 };
 
 // set POST variables
-$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D='.$freematch.'&search%5Bdepartment_ids%5D%5B%5D='.$department1.''.$department2.'&search%5Blocations%5D%5B%5D='.$location1.''.$model_category_id1.''.$model_category_id2.'&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D=&search%5Bdeleted%5D=&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
+$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D='.$freematch.'&search%5Bdepartment_ids%5D%5B%5D='.$department1.''.$department2.'&search%5Blocations%5D%5B%5D='.$location1.''.$model_category_id1.''.$model_category_id2.'&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D=&search%5Bdeleted%5D='.$deleted.'&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
 
 // open connection
 $ch = curl_init();
@@ -92,15 +126,16 @@ $json = curl_exec($ch);
 // close connection
 curl_close($ch);
 
-// var_dump($result);
-
 // create PHP array from Trail JSON export
 $array = json_decode($json, true);
 
 // Display root location
-echo "<H1>".$array['data'][0]['root_location']."</H1>";
+echo "<h1>Room ".$array['data'][0]['location']['location']['code']."</h1>";
+echo "".$array['data'][0]['location']['location']['name']."";
+echo "<h3>This room has the following equipment</h3>";
 
 // Create an array for the web page
+echo "<table class='table'>";
 echo "<tr><td>Amount</td><td>Manufacturer</td><td>Model</td><td>Description</td></tr>";
 
 $results = [];
@@ -110,13 +145,15 @@ foreach ($array['data'] as $item) {
     $name = $item['model']['name'];
     $manufacturer = $item['manufacturer'];
     $description = $item['description'];
+    $model_id = $item['model']['id'];
 
     // Check if the item name is already in the array
     if (!isset($results[$name])) {
         $results[$name] = [
             'count' => 1,                    // Count + 1 if there are multiple items of the same model
             'manufacturer' => $manufacturer, // Add manufacturer to the array
-            'description' => $description    // Add desciption to the array
+            'description' => $description,   // Add description to the array
+            'model_id' => $model_id          // Add model ID to the array
         ];
     } else {
         $results[$name]['count']++;
@@ -124,16 +161,23 @@ foreach ($array['data'] as $item) {
 }
 
 foreach ($results as $name => $information) {
-     // Output the array to html rows and columns
-    echo "<tr><td>{$information['count']} pcs</td><td>{$information['manufacturer']}</td><td>$name</td><td>{$information['description']}</td></tr>";
+     // Output the array
+     echo "<tr>";
+     echo "<td>" . $information['count'] . " pcs</td>";
+     echo "<td>" . $information['manufacturer'] . "</td>";
+     echo "<td><a href='$trail_models_baseurl{$information['model_id']}' target='_blank'>$name</a></td>";
+     echo "<td>" . $information['description'] . "</td>";
+     echo "</tr>";
 }
 
-?>
-</table>
+echo "</table>";
 
-<?php
+echo "<p>";
+echo "Please do <b>NOT</b> move equipment out of this room.<br>";
+echo "If something is missing or broken, please contact <i>siba.avhelp@uniarts.fi</i>";
+echo "</p>";
 
-// print API URI and PHP array for debugging purposes, set debug as url parameter
+// print API URL and PHP array for debugging purposes, set debug as url parameter
 if(isset($_GET['debug'])) {
      echo '<h3>Query URL</h4>';
      echo $url;
@@ -145,36 +189,4 @@ if(isset($_GET['debug'])) {
 ?>
 
 </body>
-<style>
-body {
-     font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-     font-size: 14px;
-}
-
-td {
-     padding: 5px 10px;
-}
-
-table {
-     max-width: 100%;
-     border: 0;
-     border-collapse: collapse;
-}
-
-table td:nth-child(2),
-table td:nth-child(3) {
-     white-space:nowrap;
-     width: 1px;
-     padding-right: 30px;
-     margin: 10px;
-}
-
-table tr:nth-child(1) {
-     font-weight: bold;
-}
-
-tr {
-border-bottom: 1px solid white;
-}
-</style>
 </html>
