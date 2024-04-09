@@ -10,4 +10,11 @@ $department1 = 'department_here';
 // Insert baseurl for images below, remember to define protocol and ending slash. Trail public API doesn't publish this infomation,
 // that's why we need to put images manually in folder. Use "M1234567.jpg" as filenaming.
 $img_baseurl = 'https://example.tld//path/to/images/';
+
+// Insert baseurl for Trail item reqests below. Replace example with your own
+$trail_items_baseurl = 'https://example.trail.fi/items/';
+
+// Insert baseurl for Trail model reqests below. Replace example with your own
+$trail_models_baseurl = 'https://example.trail.fi';
+
 ?>
