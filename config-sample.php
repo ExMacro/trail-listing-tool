@@ -15,6 +15,6 @@ $img_baseurl = 'https://example.tld//path/to/images/';
 $trail_items_baseurl = 'https://example.trail.fi/items/';
 
 // Insert baseurl for Trail model reqests below. Replace example with your own
-$trail_models_baseurl = 'https://example.trail.fi';
+$trail_models_baseurl = 'https://example.trail.fi/models/';
 
 ?>
