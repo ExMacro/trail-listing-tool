@@ -80,11 +80,6 @@ if ($code == '') {
     die;
 }
 
-if ($department1 == '') {
-    echo '<p>Department not set.</p>';
-    die;
-}
-
 // Check if models are defined
 $model_category_id1 = '';
 $model_category_id2 = '';
@@ -96,22 +91,9 @@ if ($model2 != '') {
     $model_category_id2 = '&search%5Bmodel_category_ids%5D%5B%5D=' . $model2;
 }
 
-// Check if department is defined instead of default from config.php
-if (isset($_GET['department'])) {
-    $department1 = $_GET['department'];
-}
-
-// Check if 2nd department is defined
-if (isset($_GET['department2'])) {
-    $department2 = $_GET['department2'];
-}
-
-if ($department2 != '') {
-    $department2 = '&search%5Bdepartment_ids%5D%5B%5D=' . $department2;
-}
 
 // Set POST variables
-$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D=' . $freematch . '&search%5Bdepartment_ids%5D%5B%5D=' . $department1 . '' . $department2 . '&search%5Blocations%5D%5B%5D=' . $location1 . '' . $model_category_id1 . '' . $model_category_id2 . '&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D=&search%5Bdeleted%5D=' . $deleted . '&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
+$url = 'https://api.trail.fi/api/v1/items?&search%5Bfree%5D='.$freematch.'&search%5Blocations%5D%5B%5D='.$location1.''.$model_category_id1.''.$model_category_id2.'&search%5Bitem_type_id%5D=&search%5Bafter%5D=&search%5Bbefore%5D=&search%5Baudited_after%5D=&search%5Baudited_before%5D=&search%5Bexpires_after%5D=&search%5Bexpires_before%5D=&search%5Bprice_above%5D=&search%5Bprice_below%5D=&search%5Bcreated_after%5D=&search%5Bmarked%5D=&search%5Bdeleted%5D='.$deleted.'&search%5Bdeleted_after%5D=&search%5Bdeleted_before%5D=&search%5Bdelete_reason%5D=&search%5Breservable%5D=&page=1&per_page=50000';
 
 // Open connection
 $ch = curl_init();
