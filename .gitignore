@@ -4,6 +4,7 @@ config.php
 # ignore test files
 test.php
 trail_beta.php
+trail_beta_intra.php
 
 #ignore Apache-config
 .htaccess
