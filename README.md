@@ -25,6 +25,7 @@ Tool for listing items from [Trail Asset Management](https://trail.fi/). To use 
 - `hide-model` (hides model column, no value needed)
 - `hide-serial` (hides serial column, no value needed)
 - `hide-manufacturer` (hides manufacturer column, no value needed)
+- `hide-itemdesc` (hides item description column, no value needed)
 - `clean` (removes TUAS colors from table which are currently there for development purposes, no value needed)
 - `summary` (gives summary table instead of device listing, no value needed)
 

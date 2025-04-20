@@ -104,7 +104,7 @@ $array = json_decode($json, true);
 
 echo '<table class="main">';
 // table headings, currently hardcoded and including some example attributes
-echo "<tr><td class='manufacturer'>Valmistaja</td><td class='modelname'>Malli</td><td>Kuvaus</td><td>Kampus</td><td>Sijainti</td><td>Tilakoodi</td><td class='serial'>Sarjanro</td></tr>";
+echo "<tr><td class='manufacturer'>Valmistaja</td><td class='modelname'>Malli</td><td>Mallin kuvaus</td><td class='item_description'>Laitekuvaus</td><td>Kampus</td><td>Sijainti</td><td>Tilakoodi</td><td class='serial'>Sarjanro</td></tr>";
 
 // build 
 foreach ($array['data'] as $thread) {
@@ -112,7 +112,7 @@ foreach ($array['data'] as $thread) {
      $room = $thread['location']['location']['name'];
      $roomcode = $campus['0']."_".$room;
      $cleancode = explode(' ', $roomcode);
-     echo "<tr class='".$thread['category']."'><td class='manufacturer'>".$thread['manufacturer']."</td><td class='modelname'>".$thread['model']['name']."</td><td>".$thread['description']."</td><td>".$campus['0']."</td><td>".$thread['location']['location']['name']."</td><td>".$cleancode[0]."</td><td class='serial'>".$thread['serial']."</td></tr>";
+     echo "<tr class='".$thread['category']."'><td class='manufacturer'>".$thread['manufacturer']."</td><td class='modelname'>".$thread['model']['name']."</td><td>".$thread['model_description']."</td><td class='item_description'>".$thread['description']."</td><td>".$campus['0']."</td><td>".$thread['location']['location']['name']."</td><td>".$cleancode[0]."</td><td class='serial'>".$thread['serial']."</td></tr>";
 
 }
 ?>
@@ -225,6 +225,13 @@ if(isset($_GET['hide-serial'])) {
 // hides manufacturer from output
 if(isset($_GET['hide-manufacturer'])) {
      echo 'tr > td.manufacturer {';
+     echo '     display: none;';
+     echo '}';
+};
+
+// hides item description from output
+if(isset($_GET['hide-itemdesc'])) {
+     echo 'tr > td.item_description {';
      echo '     display: none;';
      echo '}';
 };
